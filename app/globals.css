@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #F6F5F1;
+  color: #1E2A32;
+}
+
+.section-title {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 700;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.section-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background-image: repeating-linear-gradient(to right, #B5622A 0, #B5622A 6px, transparent 6px, transparent 11px);
+}
+
+.card {
+  background: #FFFFFF;
+  border: 1px solid #D8D3C7;
+  border-radius: 4px;
+}
+
+a.nav-link {
+  position: relative;
+}
+
+a.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 2px;
+  width: 0%;
+  background: #B5622A;
+  transition: width 0.2s ease;
+}
+
+a.nav-link:hover::after {
+  width: 100%;
+}
+
+:focus-visible {
+  outline: 2px solid #B5622A;
+  outline-offset: 2px;
+}

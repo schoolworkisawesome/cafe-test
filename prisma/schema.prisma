@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  ADMIN
+  STUDENT
+}
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  password      String
+  role          Role     @default(STUDENT)
+  studentNumber Int?
+  bio           String?
+  photoUrl      String?
+  createdAt     DateTime @default(now())
+
+  notices     Notice[]
+  boardPosts  BoardPost[]
+  comments    Comment[]
+  newsPosts   News[]
+}
+
+model SiteInfo {
+  id          Int      @id @default(1)
+  className   String   @default("우리 반")
+  teacherName String   @default("")
+  mainImageUrl String?
+  introTitle  String   @default("학급 소개")
+  introContent String  @default("학급을 소개하는 내용을 관리자 페이지에서 입력해주세요.")
+  updatedAt   DateTime @updatedAt
+}
+
+model Notice {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model BoardPost {
+  id        String    @id @default(cuid())
+  title     String
+  content   String
+  authorId  String
+  author    User      @relation(fields: [authorId], references: [id])
+  comments  Comment[]
+  createdAt DateTime  @default(now())
+}
+
+model Comment {
+  id        String    @id @default(cuid())
+  content   String
+  authorId  String
+  author    User      @relation(fields: [authorId], references: [id])
+  postId    String
+  post      BoardPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+}
+
+model News {
+  id          String       @id @default(cuid())
+  title       String
+  content     String
+  authorId    String
+  author      User         @relation(fields: [authorId], references: [id])
+  attachments Attachment[]
+  createdAt   DateTime     @default(now())
+}
+
+model Attachment {
+  id       String @id @default(cuid())
+  url      String
+  filename String
+  mimeType String
+  isImage  Boolean @default(false)
+  newsId   String
+  news     News   @relation(fields: [newsId], references: [id], onDelete: Cascade)
+}
